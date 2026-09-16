@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.owetrack.app.OweTrackViewModel
 import com.owetrack.app.data.TransactionType
 import com.owetrack.app.ui.components.BalanceText
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun QuickTransactionScreen(vm:OweTrackViewModel,onBack:()->Unit,onChoose:(Long,TransactionType)->Unit){
