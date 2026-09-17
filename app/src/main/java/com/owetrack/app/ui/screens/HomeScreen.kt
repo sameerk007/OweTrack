@@ -34,11 +34,11 @@ import com.owetrack.app.ui.components.*
             }
         }
         if(people.isEmpty()) item { EmptyState(Icons.Default.People,"No people here",if(allPeople.isEmpty()) "You haven't added anyone yet." else "Try a different search or filter.",if(allPeople.isEmpty()) "Add person" else null,onAddPerson) }
-        items(people,key={it.person.personId}) { item ->
+        items(people,key={"person-${it.person.personId}"}) { item ->
             ListItem(headlineContent={Text(item.person.name,fontWeight=FontWeight.SemiBold)},supportingContent={Text("${item.transactionCount} transactions")},trailingContent={BalanceText(item.balancePaise)},leadingContent={Surface(shape=MaterialTheme.shapes.medium,color=MaterialTheme.colorScheme.primaryContainer){Text(item.person.name.take(1).uppercase(),Modifier.padding(14.dp),fontWeight=FontWeight.Bold)}},modifier=Modifier.clickable{onPerson(item.person.personId)})
             HorizontalDivider(Modifier.padding(horizontal=20.dp))
         }
-        if(txs.isNotEmpty()) { item { Text("Recent activity",Modifier.padding(20.dp),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold) }; items(txs.take(6),key={it.transaction.transactionId}){row->TransactionRow(row.transaction,personName=row.personName,onClick={onPerson(row.transaction.personId)})} }
+        if(txs.isNotEmpty()) { item { Text("Recent activity",Modifier.padding(20.dp),style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold) }; items(txs.take(6),key={"transaction-${it.transaction.transactionId}"}){row->TransactionRow(row.transaction,personName=row.personName,onClick={onPerson(row.transaction.personId)})} }
         item { TextButton(onClick=onAddPerson,modifier=Modifier.fillMaxWidth().padding(16.dp)){Icon(Icons.Default.PersonAdd,null);Spacer(Modifier.width(8.dp));Text("Add person")} }
     }
 }
