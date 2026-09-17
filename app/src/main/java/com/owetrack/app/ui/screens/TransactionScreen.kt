@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -30,7 +31,7 @@ private val commonPurposes=listOf("Dinner","Emergency","Shopping","Rent","Travel
     fun submit(){val paise=Money.parseToPaise(amount);if(paise==null){error="Enter an amount greater than zero";return};if(paise>=100_00_000_00L&&!largeConfirmed){largeConfirmed=true;return};val available=(person?.balancePaise?:Long.MAX_VALUE)+originalReceivedPaise;if(type==TransactionType.RECEIVED && paise>available && !overpay){overpay=true;return};scope.launch{vm.saveTransaction(transactionId,personId,type,paise,date,method,provider,purpose.takeIf{type==TransactionType.GIVEN},notes);onSaved()}}
     Scaffold(
         modifier=Modifier.imePadding(),
-        topBar={TopAppBar({Text(if(transactionId>0)"Edit transaction" else if(type==TransactionType.GIVEN)"Give money" else "Receive money")},navigationIcon={IconButton(onBack){Icon(Icons.Default.ArrowBack,null)}})},
+        topBar={TopAppBar({Text(if(transactionId>0)"Edit transaction" else if(type==TransactionType.GIVEN)"Give money" else "Receive money")},navigationIcon={IconButton(onBack){Icon(Icons.AutoMirrored.Filled.ArrowBack,null)}})},
         bottomBar={Surface{Button(::submit,Modifier.fillMaxWidth().padding(horizontal=20.dp,vertical=12.dp).height(54.dp)){Text(if(type==TransactionType.GIVEN)"Save transaction" else "Save repayment")}}}
     ){pad->Column(Modifier.fillMaxSize().padding(pad).verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)){
         OutlinedTextField(amount,{amount=it;error=null},Modifier.fillMaxWidth(),label={Text("Amount")},prefix={Text("₹ ")},keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal),singleLine=true,isError=error!=null,supportingText=error?.let{{Text(it)}})

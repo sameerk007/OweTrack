@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ManageSearch
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,12 +27,12 @@ import com.owetrack.app.ui.components.*
     LazyColumn(Modifier.fillMaxSize(),contentPadding=PaddingValues(bottom=96.dp)) {
         item {
             Column(Modifier.padding(20.dp),verticalArrangement=Arrangement.spacedBy(14.dp)) {
-                Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text("OweTrack",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold);IconButton(onSearch){Icon(Icons.Default.ManageSearch,"Search transactions")}}
+                Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text("OweTrack",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold);IconButton(onSearch){Icon(Icons.AutoMirrored.Filled.ManageSearch,"Search transactions")}}
                 ElevatedCard(Modifier.fillMaxWidth()) { Column(Modifier.padding(20.dp)) { Text("TOTAL OUTSTANDING",style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.onSurfaceVariant); Text(Money.format(outstanding),style=MaterialTheme.typography.displaySmall,fontWeight=FontWeight.Bold); Text("${allPeople.count{it.balancePaise>0}} people currently owe you") } }
                 Button(onClick=onQuickTransaction,modifier=Modifier.fillMaxWidth().height(52.dp)){Icon(Icons.Default.Add,null);Spacer(Modifier.width(8.dp));Text("Add transaction")}
                 OutlinedTextField(options.query,vm::setQuery,Modifier.fillMaxWidth(),placeholder={Text("Search people")},leadingIcon={Icon(Icons.Default.Search,null)},singleLine=true,trailingIcon={if(options.query.isNotBlank())IconButton({vm.setQuery("")}){Icon(Icons.Default.Clear,null)}})
                 Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)){ PeopleFilter.entries.forEach { f->FilterChip(options.filter==f,{vm.setFilter(f)},{Text(f.name.lowercase().replaceFirstChar(Char::uppercase))}) } }
-                Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text("People",style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold);Box{TextButton({sortOpen=true}){Icon(Icons.Default.Sort,null);Text(options.sort.name.lowercase().replace('_',' ').replaceFirstChar(Char::uppercase))};DropdownMenu(sortOpen,{sortOpen=false}){PeopleSort.entries.forEach{ s->DropdownMenuItem({Text(s.name.lowercase().replace('_',' ').replaceFirstChar(Char::uppercase))},{vm.setSort(s);sortOpen=false})}}}}
+                Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text("People",style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold);Box{TextButton({sortOpen=true}){Icon(Icons.AutoMirrored.Filled.Sort,null);Text(options.sort.name.lowercase().replace('_',' ').replaceFirstChar(Char::uppercase))};DropdownMenu(sortOpen,{sortOpen=false}){PeopleSort.entries.forEach{ s->DropdownMenuItem({Text(s.name.lowercase().replace('_',' ').replaceFirstChar(Char::uppercase))},{vm.setSort(s);sortOpen=false})}}}}
             }
         }
         if(people.isEmpty()) item { EmptyState(Icons.Default.People,"No people here",if(allPeople.isEmpty()) "You haven't added anyone yet." else "Try a different search or filter.",if(allPeople.isEmpty()) "Add person" else null,onAddPerson) }

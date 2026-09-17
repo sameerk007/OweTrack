@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Contacts
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -45,7 +45,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
             }.onFailure{contactError="Could not read the selected contact"}
         }
     }
-    Scaffold(topBar={TopAppBar({Text("Add person")},navigationIcon={IconButton(onBack){Icon(Icons.Default.ArrowBack,null)}})}){pad->
+    Scaffold(topBar={TopAppBar({Text("Add person")},navigationIcon={IconButton(onBack){Icon(Icons.AutoMirrored.Filled.ArrowBack,null)}})}){pad->
         Column(Modifier.padding(pad).verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)){
             OutlinedButton(onClick={try{pickContact.launch(Intent(Intent.ACTION_PICK,ContactsContract.CommonDataKinds.Phone.CONTENT_URI))}catch(_:ActivityNotFoundException){contactError="No contacts app is available"}},Modifier.fillMaxWidth()){
                 Icon(Icons.Default.Contacts,null);Spacer(Modifier.width(8.dp));Text("Choose from contacts")
