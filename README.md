@@ -41,3 +41,11 @@ gradle testDebugUnitTest
 ```
 
 The calculation tests cover the supplied lending sequence, overpayment, zero/negative rejection, decimals, same-day order, edit/delete recalculation, and large values. Room exports its schema to `app/schemas`; future database version changes should include a migration and migration test before release.
+
+## GitHub releases
+
+The Android CI workflow keeps debug APKs as temporary Actions artifacts. A version tag such as `v1.0.1` runs the release workflow, which builds a signed APK and attaches it to a GitHub Release. The release APK uses the same signing key for every version and its version code comes from the tag (`MAJOR * 1000000 + MINOR * 1000 + PATCH`). Use three numeric components, with MINOR and PATCH below 1000.
+
+The release workflow reads `SIGNING_KEYSTORE_BASE64` and `SIGNING_PASSWORD` from repository Actions secrets. The signing key must be retained securely outside GitHub as well; losing it prevents normal updates to installed release copies. Local signing files in `signing/` are excluded from Git.
+
+Before changing from an Actions debug APK to the first release APK, create a full JSON backup in Settings and keep it outside the phone. Debug builds use a different certificate, so Android requires uninstalling that copy before installing the release. Restore the JSON backup after installing the release. Subsequent release APKs can update in place when signed with the same release key.

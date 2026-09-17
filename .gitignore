@@ -8,3 +8,5 @@
 .cxx
 app/build
 *.apk
+/signing/
+/.tools/

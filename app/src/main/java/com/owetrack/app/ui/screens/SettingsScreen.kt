@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun SettingsScreen(vm:OweTrackViewModel,context:Context){
     val prefs by vm.preferences.collectAsState();val scope=rememberCoroutineScope();var status by remember{mutableStateOf<String?>(null)};var pendingRestore by remember{mutableStateOf<Pair<List<PersonEntity>,List<TransactionEntity>>?>(null)}
-    val backup=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")){uri->uri?.let{scope.launch{runCatching{val raw=BackupCodec.encode(vm.repository.allPeople(),vm.repository.allTransactionsSnapshot());context.contentResolver.openOutputStream(uri)?.bufferedWriter()?.use{it.write(raw)}}.onSuccess{status="Backup saved"}.onFailure{status="Backup failed"}}}}
+    val backup=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")){uri->uri?.let{scope.launch{runCatching{val raw=BackupCodec.encode(vm.repository.allPeople(),vm.repository.allTransactionsSnapshot());requireNotNull(context.contentResolver.openOutputStream(uri)){"Could not open backup file"}.bufferedWriter().use{it.write(raw)}}.onSuccess{status="Backup saved"}.onFailure{status="Backup failed"}}}}
     val restore=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()){uri->uri?.let{scope.launch{runCatching{val raw=context.contentResolver.openInputStream(uri)!!.bufferedReader().use{it.readText()};BackupCodec.decode(raw)}.onSuccess{pendingRestore=it}.onFailure{status="Invalid backup file"}}}}
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
         Text("Settings",style=MaterialTheme.typography.headlineMedium)
